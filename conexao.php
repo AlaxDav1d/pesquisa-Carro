@@ -7,7 +7,4 @@
       $mysqli = new mysqli($host,$user,$pass,$bd);
       if( $mysqli->connect_errno)
            echo 'Erro Ao Conectar';
-      else{
-           echo 'Chamou a funcao';
-      }
-?>
+     

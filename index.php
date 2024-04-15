@@ -1,12 +1,6 @@
 <?php
      include('conexao.php');
 
-     $pesquisa =  $mysqli->real_escape_string($_GET['envio'])  ;
-
-     $sql_code = "SELECT * FROM veiculo WHERE Fabricante LIKE  '%$pesquisa%'  AND modelo LIKE '%$pesquisa%' 
-     AND veiculo LIKE '%$pesquisa%' ";
-
-     $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +13,7 @@
 <body>
      <h1>Pesquisa</h1>
      <form action="">
-          <input  name="envio" placeholder="pesquise algo" type="text">
+          <input  name="envio" placeholder="pesquise algo"  type="text">
           <input type="submit" value="Enviar">
      </form>
      <table border="1">
@@ -28,9 +22,37 @@
                <th>Modelo</th>
                <th>Veiculo</th>
           </tr>
-          <tr>
-               <td colspan="3">Pesquise algo para aparecer os resultados</td>
-          </tr>
+          <?php
+               if($_GET['envio'] == ''){ 
+          ?>
+               <tr>
+                   <td colspan="3">Digite algo para pesquisar</td>
+               </tr>
+               
+               <?php
+               }else{
+                    $pesquisa =  $mysqli->real_escape_string($_GET['envio']);
+                    $sql_code = "SELECT * FROM veiculo WHERE Fabricante LIKE '%$pesquisa%' ";
+                    $sql_query = $mysqli->query($sql_code) or die($mysqli->error);
+                    if($sql_query->num_rows == 0){     
+                    ?>
+                         <p>Nada Encontrado</p>
+               <?php
+                    }else{
+                         while($dados = $sql_query->fetch_assoc()){
+               ?>
+                    <tr>
+                         <td><?php echo $dados['Fabricante']?></td>
+                         <td><?php echo $dados['modelo']?></td>
+                         <td><?php echo $dados['veiculo']?></td>
+                    </tr>
+                              <?php
+                         }
+                    }     
+               }
+
+               ?>
+                 
      </table>
 </body>
 </html>
